@@ -1,6 +1,5 @@
-import pandas as pd
+
 import streamlit as st
-import plotly.express as px
 from db import load_data
 
 
@@ -49,6 +48,8 @@ ORDER BY points DESC
 LIMIT 10;
 """
 
+
+
 PENALTY_QUERY = """
 SELECT
     CONCAT(p.first_name,' ',p.last_name) AS player_name,
@@ -92,12 +93,12 @@ def show_leaderboard(title, query, stat_column):
 
 def render():
 
-    st.title("🏆 NHL Leaderboards")
+    st.title("NHL Leaderboards")
 
     tab1, tab2 = st.tabs(
         [
-            "🎯 Scoring",
-            "🥊 Penalties", 
+            "Scoring",
+            "Penalties", 
         ]
     )
 

@@ -1,7 +1,7 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
 
-import home,standings_info,teams_info,game_results,player_search,dashboard
+import home,standings_info,teams_info,game_results,player_search,dashboard,sql_query
 
 st.set_page_config(
     page_title="NHL Explorer",
@@ -15,7 +15,7 @@ with st.sidebar:
     st.caption("Teams · Standings · Rosters · Players")
     selected = option_menu(
         menu_title=None,
-        options=["Home", "Team Info", "Standings","Game Results","Players","Dashboard"],
+        options=["Home", "Team Info", "Standings","Game Results","Players","Dashboard","SQL Queries"],
         icons=["house-door", "list-ol", "shield-shaded", "search"],
         default_index=0,
         styles={
@@ -33,7 +33,8 @@ PAGES = {
     "Standings": standings_info.render,
     "Game Results": game_results.render,
     "Players":player_search.render,
-    "Dashboard":dashboard.render
+    "Dashboard":dashboard.render,
+    "SQL Queries":sql_query.render,
 }
 
 PAGES[selected]()
