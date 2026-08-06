@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 
-from db import load_full_standings, load_players, load_teams
+from db import load_full_standings, load_players, load_teams,load_full_players
 
 POSITION_GROUPS = {
     "Forwards": ["C", "LW", "RW"],
@@ -54,11 +54,14 @@ def render():
     st.divider()
     st.subheader("Roster")
 
-    players_df = load_players()
+    players_df = load_full_players()
+    print(players_df.columns)
+    print(players_df.head())
+    print(players_df.where(players_df["position"] == "G"))
     roster = players_df[players_df["team_id"] == team["team_id"]]
 
     if roster.empty:
-        st.info("No roster data found for this team. Run load_nhl_players.py first.")
+        st.info("No roster data found for this team. Run load_players.py first.")
         return
 
     tabs = st.tabs(list(POSITION_GROUPS.keys()))

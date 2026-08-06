@@ -6,7 +6,7 @@ from db import load_full_players, load_full_standings, load_teams
 
 
 def render():
-    st.title("🏒 NHL League Dashboard")
+    st.title("NHL League Dashboard")
 
     teams_df = load_teams()
     standings_df = load_full_standings()

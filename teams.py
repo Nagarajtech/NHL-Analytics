@@ -1,7 +1,6 @@
-import json
 import sqlite3
 import requests
-import utils
+import db
 
 URL = "https://api-web.nhle.com/v1/standings/now"  # any JSON API endpoint
 DB_FILE = "nhl.db"
@@ -56,10 +55,6 @@ def extract_rows(payload: dict):
     return rows
 
 
-def create_connection(db_name: str) -> sqlite3.Connection:
-    return sqlite3.connect(db_name)
-
-
 def save_to_sqlite(rows: list, conn: sqlite3.Connection) -> None:
     cursor = conn.cursor()
 
@@ -91,7 +86,7 @@ def main():
     print(f"Fetching {URL} ...")
     payload = fetch_teams(URL)
     teamData = extract_rows(payload)
-    conn = create_connection(DB_FILE)
+    conn = db.create_connection(DB_FILE)
     print(len(teamData))
     create_teams_table(conn)
 

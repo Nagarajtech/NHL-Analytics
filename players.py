@@ -2,11 +2,12 @@ import json
 import sqlite3
 import requests
 import utils
+import db
 
 URL = (
     "https://api-web.nhle.com/v1/roster/{team_abbrev}/current"  # any JSON API endpoint
 )
-DB_FILE = "nhl.db"
+DB_FILE = db.DB_PATH
 TABLE_NAME = "players"
 
 
@@ -29,10 +30,6 @@ def create_table(conn: sqlite3.Connection) -> None:
         )
         """)
     conn.commit()
-
-
-def create_connection(db_name: str) -> sqlite3.Connection:
-    return sqlite3.connect(db_name)
 
 
 def get_team_ids(conn: sqlite3.Connection):
@@ -112,7 +109,7 @@ def save_to_sqlite(conn: sqlite3.Connection, rows: list) -> None:
 
 
 def main():
-    conn = create_connection(DB_FILE)
+    conn = db.create_connection(DB_FILE)
     create_table(conn)
     # team_list = get_team_ids(conn)
     team_map = get_team_map(conn)

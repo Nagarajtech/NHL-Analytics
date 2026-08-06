@@ -1,10 +1,11 @@
-import json
+
 import sqlite3
 import requests
 import utils
+import db
 
 URL = "https://api-web.nhle.com/v1/club-schedule-season/{team_abbrev}/now"
-DB_FILE = "nhl.db"
+DB_FILE = db.DB_PATH
 TABLE_NAME = "games"
 
 
@@ -26,10 +27,6 @@ CREATE TABLE IF NOT EXISTS games (
     FOREIGN KEY (away_team_id) REFERENCES teams(team_id)
 );
 """
-
-
-def create_connection(db_name: str) -> sqlite3.Connection:
-    return sqlite3.connect(db_name)
 
 
 def create_table(conn: sqlite3.Connection) -> None:
@@ -123,7 +120,7 @@ def save_to_sqlite(rows: list, conn: sqlite3.Connection) -> None:
 
 
 def main():
-    conn = create_connection(DB_FILE)
+    conn = db.create_connection(DB_FILE)
     create_table(conn)
     team_map = get_team_map(conn)
     for team_abbrev in sorted(team_map.keys()):
@@ -135,7 +132,7 @@ def main():
             print(f"No games found for {team_abbrev}")
             continue
         try:
-            save_to_sqlite(rows, conn, team_map)
+            save_to_sqlite(rows, conn)
         except sqlite3.IntegrityError as exc:
             print("error")
     conn.close()

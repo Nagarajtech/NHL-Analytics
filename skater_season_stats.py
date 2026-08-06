@@ -1,11 +1,12 @@
 import json
-import sqlite3
-import requests
+import sqlite3 
 import utils
+import db
+import config
 
-DB_FILE = "nhl.db"
+DB_FILE = db.DB_PATH
 TABLE_NAME = "skater_season_stats"
-JSON_FILE = "skater_season_stats.json"
+JSON_FILE = config.JSON_DATA_PATH / "skater_season_stats.json"
 
 SKATER_SEASON_SCHEMA = """
 
@@ -27,10 +28,6 @@ CREATE TABLE IF NOT Exists skater_season_stats (
     FOREIGN KEY (team_id) REFERENCES teams(team_id)
 );
 """
-
-
-def create_connection(db_name: str) -> sqlite3.Connection:
-    return sqlite3.connect(db_name)
 
 
 def create_table(conn: sqlite3.Connection) -> None:
@@ -88,7 +85,7 @@ def insert_into_skater_table(conn: sqlite3.Connection, rows) -> None:
 
 
 def main():
-    conn = create_connection(DB_FILE)
+    conn = db.create_connection(DB_FILE)
     create_table(conn)
     with open(JSON_FILE, "r", encoding="utf-8") as f:
         stats = json.load(f)

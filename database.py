@@ -1,7 +1,5 @@
 import sqlite3
-import config
-import utils
-import teams
+import config 
 DB_PATH = config.PROJECT_ROOT / "data" / "nhl.db"
 
 TEAMS_SCHEMA = """
@@ -26,8 +24,7 @@ def get_connection() -> sqlite3.Connection:
 
 def create_teams_table(conn: sqlite3.Connection) -> None:
     conn.execute(TEAMS_SCHEMA)
-    conn.commit()
-    logger.info("Ensured 'teams' table exists")
+    conn.commit() 
 
  
  

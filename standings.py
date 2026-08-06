@@ -2,9 +2,10 @@ import json
 import sqlite3
 import requests
 import utils
+import db
 
 URL = "https://api-web.nhle.com/v1/standings/now"  # any JSON API endpoint
-DB_FILE = "nhl.db"
+DB_FILE = db.DB_PATH
 
 STANDINGS_SCHEMA = """
 CREATE TABLE IF NOT EXISTS standings (
@@ -79,9 +80,6 @@ def extract_rows(payload: dict, team_map):
     return rows
 
 
-def create_connection(db_name: str) -> sqlite3.Connection:
-    return sqlite3.connect(db_name)
-
 
 def save_to_sqlite(rows: list, conn: sqlite3.Connection) -> None:
     cursor = conn.cursor()
@@ -125,7 +123,7 @@ def save_to_sqlite(rows: list, conn: sqlite3.Connection) -> None:
 
 def main():
 
-    conn = create_connection(DB_FILE)
+    conn = db.create_connection(DB_FILE)
     create_standings_table(conn)
 
     team_map = get_team_map(conn)

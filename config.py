@@ -7,16 +7,5 @@ from pathlib import Path
 # --------------------------------------------------------------------------
 
 PROJECT_ROOT = Path(__file__).resolve().parent
-
-
-LOG_DIR = PROJECT_ROOT / "logs"
-
- 
-
-
-# --------------------------------------------------------------------------
-# Logging
-# --------------------------------------------------------------------------
-
-LOG_LEVEL = "INFO"
-LOG_FILE = LOG_DIR / "fetch.log"
+DB_PATH = PROJECT_ROOT / "data" / "nhl.db"
+JSON_DATA_PATH = PROJECT_ROOT  / "JsonData"

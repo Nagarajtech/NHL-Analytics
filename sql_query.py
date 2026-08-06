@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from db import get_connection
+from db import create_connection, DB_PATH
 
 QUERIES = {
 
@@ -79,7 +79,7 @@ QUERIES = {
 
 def run_query(query):
 
-    conn = get_connection()
+    conn = create_connection(DB_PATH)
 
     try:
         df = pd.read_sql_query(

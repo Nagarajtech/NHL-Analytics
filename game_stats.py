@@ -1,12 +1,12 @@
 import json
-import sqlite3
-import requests
-import utils
+import sqlite3 
+import db
+import config
 
-URL = "https://api-web.nhle.com/v1/gamecenter/{game_id}/boxscore"
-DB_FILE = "nhl.db"
+
+DB_FILE = db.DB_PATH
 TABLE_NAME = "game_stats"
-JSON_FILE = "game_stats.json"
+JSON_FILE = config.JSON_DATA_PATH / "game_stats.json"
 
 GAMES_STATS_SCHEMA = """
 CREATE TABLE IF NOT EXISTS game_stats (
@@ -29,9 +29,6 @@ CREATE TABLE IF NOT EXISTS game_stats (
 );
 """
 
-
-def create_connection(db_name: str) -> sqlite3.Connection:
-    return sqlite3.connect(db_name)
 
 
 def create_table(conn: sqlite3.Connection) -> None:
@@ -112,7 +109,7 @@ def insert_game_stats_table(rows: list, conn: sqlite3.Connection) -> None:
 
 
 def main():
-    conn = create_connection(DB_FILE)
+    conn = db.create_connection(DB_FILE)
     create_table(conn)
     #game_list = get_game_ids(conn)
     # Load JSON

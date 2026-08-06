@@ -8,13 +8,11 @@ import streamlit as st
 DB_PATH = os.environ.get("NHL_DB_PATH", "nhl.db")
 
 
-def get_connection() -> sqlite3.Connection:
-    return sqlite3.connect(DB_PATH, check_same_thread=False)
-
-
+def create_connection(db_name: str) -> sqlite3.Connection:
+    return sqlite3.connect(db_name)
 
 def load_teams() -> pd.DataFrame:
-    conn = get_connection()
+    conn = create_connection(DB_PATH)
     try:
         return pd.read_sql_query("SELECT * FROM teams", conn)
     except Exception:
@@ -24,7 +22,7 @@ def load_teams() -> pd.DataFrame:
 
 
 def load_standings() -> pd.DataFrame:
-    conn = get_connection()
+    conn = create_connection(DB_PATH)
     try:
         return pd.read_sql_query("SELECT * FROM standings", conn)
     except Exception:
@@ -34,7 +32,7 @@ def load_standings() -> pd.DataFrame:
 
 
 def load_players() -> pd.DataFrame:
-    conn = get_connection()
+    conn = create_connection(DB_PATH)
     try:
         return pd.read_sql_query("SELECT * FROM players", conn)
     except Exception:
@@ -45,7 +43,7 @@ def load_players() -> pd.DataFrame:
 
 
 def load_full_standings() -> pd.DataFrame:
-    conn = get_connection()
+    conn = create_connection(DB_PATH)
     try:
         query = """
             SELECT s.*, t.team_name, t.team_abbrev, t.conference_name,
@@ -61,7 +59,7 @@ def load_full_standings() -> pd.DataFrame:
 
 
 def load_full_players() -> pd.DataFrame:
-    conn = get_connection()
+    conn = create_connection(DB_PATH)
     try:
         query = """
             SELECT p.*, t.team_name, t.team_abbrev, t.logo_url,
@@ -76,7 +74,7 @@ def load_full_players() -> pd.DataFrame:
         conn.close()
 
 def load_games() -> pd.DataFrame:
-    conn = get_connection()
+    conn = create_connection(DB_PATH)
     try:
         query = """
             SELECT g.season as Season,g.game_date as GameDate,g.game_state as GameState,
@@ -94,7 +92,7 @@ def load_games() -> pd.DataFrame:
 
 
 def load_players():
-    conn = get_connection()
+    conn = create_connection(DB_PATH)
 
     query = """
     SELECT
@@ -111,7 +109,8 @@ def load_players():
     SUM(gs.plus_minus) AS plus_minus,
     SUM(gs.penalty_min) AS penalty_min,
     SUM(gs.toi) AS total_toi,
-    COUNT(gs.game_id) AS games_played
+    COUNT(gs.game_id) AS games_played,
+    p.team_id
 FROM players p
 JOIN teams t
     ON p.team_id = t.team_id
@@ -136,7 +135,7 @@ ORDER BY p.last_name;
     return df
 
 def load_data(query):
-    conn = get_connection()
+    conn = create_connection(DB_PATH)
     df = pd.read_sql(query, conn)
     conn.close()
     return df
